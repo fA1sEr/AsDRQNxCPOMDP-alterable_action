@@ -5,8 +5,8 @@ from random import randint
 import numpy as np
 
 class mit:
-    def __init__(self, filename):
-        self.file = filename
+    def __init__(self):
+        self.file = 'mit.POMDP'
         self.discount = 0.990000
         self.states = 204
         self.actions = 4
@@ -94,14 +94,16 @@ class mit:
         return self.total_reward
 
 class GameSimulator:
-    def __init__(self, frame_repeat=4):
+    def __init__(self, frame_repeat=1):
+        self.last_action = 0
+        self.action_length = 4 # change two place [2]
         self.game = None
         self.frame_repeat = frame_repeat
         
-    def initialize(self, filename="mit.POMDP"):
+    def initialize(self):
         # 初始化游戏，返回游戏的动作数目
         print("Initializing game...")
-        self.game = mit(filename)
+        self.game = mit()
         self.game.init_game()
         print("Game initialized.")
         return self.game.actions
@@ -110,6 +112,14 @@ class GameSimulator:
         # 获取当前游戏的画面，游戏结束则获得空
         obs_list = np.zeros([self.game.observations], dtype=np.int32).tolist()
         obs_list[self.game.cur_observation] = 1
+        action_rep = action_length//self.game.actions
+        action_remain = action_length%self.game.actions
+        obs_list = obs_list + ([0]*action_remain)
+        for i in range(self.game.actions):
+            if i == self.last_action:
+                obs_list = obs_list + ([1]*action_rep)
+            else:
+                obs_list = obs_list + ([0]*action_rep)
         return obs_list
     
     def get_action_size(self):
@@ -121,10 +131,10 @@ class GameSimulator:
     
     def make_action(self, action):
         # 执行动作
-        new_state, reward, done = self.game.make_action(action)
-        obs_list = np.zeros([self.game.observations], dtype=np.int32).tolist()
-        obs_list[new_state] = 1
-        return obs_list, reward, done
+        _, reward, done = self.game.make_action(action)
+        new_state = self.get_state()
+        self.last_action = action
+        return new_state, reward, done
     
     def is_terminared(self):
         # 判断游戏是否终止

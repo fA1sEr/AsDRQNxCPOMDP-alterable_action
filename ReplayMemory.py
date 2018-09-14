@@ -3,9 +3,9 @@ import numpy as np
 
 
 class ReplayMemory:
-    def __init__(self, memory_cap, batch_size, resolution, trace_length):
+    def __init__(self, memory_cap, batch_size, state_length, trace_length):
 
-        state_shape = (memory_cap, resolution[0], resolution[1], resolution[2])
+        state_shape = (memory_cap, state_length)
         self.s1 = np.zeros(state_shape, dtype=np.float32)
         self.s2 = np.zeros(state_shape, dtype=np.float32)
         self.a = np.zeros(memory_cap, dtype=np.int32)
@@ -20,10 +20,10 @@ class ReplayMemory:
 
     def add_transition(self, s1, a, r, s2, d):
 
-        self.s1[self.index, :, :, :] = s1
+        self.s1[self.index, :] = s1
         self.a[self.index] = a
         self.r[self.index] = r
-        self.s2[self.index, :, :, :] = s2
+        self.s2[self.index, :] = s2
         self.d[self.index] = d
 
         self.index = (self.index+1) % self.memory_cap

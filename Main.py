@@ -8,16 +8,18 @@ import tensorflow as tf
 from tqdm import trange
 from vizdoom import *
 from Agent import Agent
-from GameSimulator import GameSimulator
+from mit_GameSimulator import GameSimulator
 
 # to choose gpu
-os.environ["CUDA_VISIBLE_DEVICES"] = "6"
+os.environ["CUDA_VISIBLE_DEVICES"] = "4"
 
-FRAME_REPEAT = 4 # How many frames 1 action should be repeated
+FRAME_REPEAT = 1 # How many frames 1 action should be repeated
 UPDATE_FREQUENCY = 4 # How many actions should be taken between each network update
 COPY_FREQUENCY = 1000
 
-RESOLUTION = (80, 45, 4) # Resolution
+STATE_NUM = 204
+ACTION_LENGTH = 4 # change two place [1]
+STATE_LENGTH = STATE_NUM + ACTION_LENGTH
 BATCH_SIZE = 32 # Batch size for experience replay
 LEARNING_RATE = 0.001 # Learning rate of model
 GAMMA = 0.99 # Discount factor
@@ -33,7 +35,7 @@ RANDOM_WANDER_STEPS = 200000 # How many steps to be sampled randomly before trai
 TRACE_LENGTH = 8 # How many traces are used for network updates
 HIDDEN_SIZE = 768 # Size of the third convolutional layer when flattened
 
-EPOCHS = 20000000 # Epochs for training (1 epoch = 200 training Games and 10 test episodes)
+EPOCHS = 200 # Epochs for training (1 epoch = 200 training Games and 10 test episodes)
 GAMES_PER_EPOCH = 200 # How actions to be taken per epoch
 EPISODES_TO_TEST = 10 # How many test episodes to be run per epoch for logging performance
 EPISODE_TO_WATCH = 10 # How many episodes to watch after training is complete
@@ -73,14 +75,14 @@ game.initialize()
 
 ACTION_COUNT = game.get_action_size()
 
-gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.33)
-
-SESSION = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
+config = tf.ConfigProto()
+config.gpu_options.allow_growth = True
+SESSION = tf.Session(config=config)
 
 if LOAD_MODEL:
     EPSILON_MAX = 0.25 # restart after 20+ epoch
 
-agent = Agent(memory_cap = MEMORY_CAP, batch_size = BATCH_SIZE, resolution = RESOLUTION, action_count = ACTION_COUNT,
+agent = Agent(memory_cap = MEMORY_CAP, batch_size = BATCH_SIZE, state_length = STATE_LENGTH, action_count = ACTION_COUNT,
             session = SESSION, lr = LEARNING_RATE, gamma = GAMMA, epsilon_min = EPSILON_MIN, trace_length=TRACE_LENGTH,
             epsilon_decay_steps = EPSILON_DECAY_STEPS, epsilon_max=EPSILON_MAX, hidden_size=HIDDEN_SIZE)
 
@@ -110,7 +112,7 @@ if not SKIP_LEARNING:
         if not LOAD_MODEL:
             action = agent.random_action()
         else:
-            action = agent.act(game.get_last_action(), state)
+            action = agent.act(state)
         img_state, reward, done = game.make_action(action)
         if not done:
             state_new = img_state

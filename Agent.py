@@ -5,23 +5,23 @@ from ReplayMemory import ReplayMemory
 
 
 class Agent:
-    def __init__(self, memory_cap, batch_size, resolution, action_count, session,
+    def __init__(self, memory_cap, batch_size, state_length, action_count, session,
                  lr, gamma, epsilon_min, epsilon_decay_steps, epsilon_max, trace_length, hidden_size):
 
         self.model = Network(session=session, action_count=action_count,
-                             resolution=resolution, lr=lr, batch_size=batch_size,
+                             state_length=state_length, lr=lr, batch_size=batch_size,
                              trace_length=trace_length, hidden_size=hidden_size, scope='main')
 
         self.target_model = Network(session=session, action_count=action_count,
-                                    resolution=resolution, lr=lr, batch_size=batch_size,
+                                    state_length=state_length, lr=lr, batch_size=batch_size,
                                     trace_length=trace_length, hidden_size=hidden_size, scope='target')
 
         self.memory = ReplayMemory(memory_cap=memory_cap, batch_size=batch_size,
-                                   resolution=resolution, trace_length=trace_length)
+                                   state_length=state_length, trace_length=trace_length)
 
         self.batch_size = batch_size
 
-        self.resolution = resolution
+        self.state_length = state_length
         self.action_count = action_count
         self.gamma = gamma
         self.epsilon_min = epsilon_min

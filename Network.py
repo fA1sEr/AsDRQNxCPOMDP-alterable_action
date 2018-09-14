@@ -3,28 +3,19 @@ import tensorflow.contrib.slim as slim
 
 
 class Network:
-    def __init__(self, session, action_count, resolution, lr, batch_size, trace_length, hidden_size, scope):
+    def __init__(self, session, action_count, state_length, lr, batch_size, trace_length, hidden_size, scope):
         self.session = session
-        self.resolution = resolution
         self.train_batch_size = batch_size
+        self.state_length = state_length
         self.trace_length_size = trace_length
 
-        self.state = tf.placeholder(tf.float32, shape=[None, resolution[0], resolution[1], resolution[2]])
-
-        conv1 = slim.conv2d(inputs=self.state, num_outputs=32, kernel_size=[8, 8], stride=[4, 4],
-                            activation_fn=tf.nn.relu, padding='VALID', scope=scope+'_c1')
-
-        conv2 = slim.conv2d(inputs=conv1, num_outputs=64, kernel_size=[4, 4], stride=[2, 2],
-                            activation_fn=tf.nn.relu, padding='VALID', scope=scope+'_c2')
-
-        conv3 = slim.conv2d(inputs=conv2, num_outputs=64, kernel_size=[3, 3], stride=[1, 1],
-                            activation_fn=tf.nn.relu, padding='VALID', scope=scope+'_c3')
-
-        flat = slim.flatten(conv3)
-
-        self.cell = tf.contrib.rnn.BasicLSTMCell(num_units=hidden_size, state_is_tuple=True)
+        self.state = tf.placeholder(tf.float32, shape=[None, self.state_length])
         self.train_length = tf.placeholder(dtype=tf.int32)
         self.batch_size = tf.placeholder(dtype=tf.int32, shape=[])
+
+        flat = tf.contrib.layers.fully_connected(inputs=self.state, num_outputs=self.batch_size*self.train_length*hidden_size, activation_fn=None)
+
+        self.cell = tf.contrib.rnn.BasicLSTMCell(num_units=hidden_size, state_is_tuple=True)
 
         self.fc_reshape = tf.reshape(flat, [self.batch_size, self.train_length, hidden_size])
         self.state_in = self.cell.zero_state(self.batch_size, tf.float32)
