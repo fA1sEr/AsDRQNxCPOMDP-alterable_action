@@ -13,7 +13,7 @@ class Network:
         self.train_length = tf.placeholder(dtype=tf.int32)
         self.batch_size = tf.placeholder(dtype=tf.int32, shape=[])
 
-        flat = tf.contrib.layers.fully_connected(inputs=self.state, num_outputs=self.batch_size*self.train_length*hidden_size, activation_fn=None)
+        flat = tf.contrib.layers.legacy_fully_connected(x=self.state, num_output_units=hidden_size)
 
         self.cell = tf.contrib.rnn.BasicLSTMCell(num_units=hidden_size, state_is_tuple=True)
 

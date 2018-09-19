@@ -17,7 +17,7 @@ FRAME_REPEAT = 1 # How many frames 1 action should be repeated
 UPDATE_FREQUENCY = 4 # How many actions should be taken between each network update
 COPY_FREQUENCY = 1000
 
-STATE_NUM = 204
+STATE_NUM = 28
 ACTION_LENGTH = 4 # change two place [1]
 STATE_LENGTH = STATE_NUM + ACTION_LENGTH
 BATCH_SIZE = 32 # Batch size for experience replay

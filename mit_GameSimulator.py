@@ -112,8 +112,8 @@ class GameSimulator:
         # 获取当前游戏的画面，游戏结束则获得空
         obs_list = np.zeros([self.game.observations], dtype=np.int32).tolist()
         obs_list[self.game.cur_observation] = 1
-        action_rep = action_length//self.game.actions
-        action_remain = action_length%self.game.actions
+        action_rep = self.action_length//self.game.actions
+        action_remain = self.action_length%self.game.actions
         obs_list = obs_list + ([0]*action_remain)
         for i in range(self.game.actions):
             if i == self.last_action:
