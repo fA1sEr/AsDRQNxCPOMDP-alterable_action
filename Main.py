@@ -65,7 +65,7 @@ def updateTarget(op_holder,sess):
 
 def saveScore(score):
     my_file = open(reward_savefile, 'a')  # Name and path of the reward text file
-    my_file.write("%s\n" % score)
+    my_file.write("%s(%s)\n" % (score.mean(), score.std()))
     my_file.close()
 
 ###########################################
@@ -178,7 +178,7 @@ if not SKIP_LEARNING:
               "min: %.1f" % test_scores.min(), "max: %.1f" % test_scores.max())
 
         if SAVE_MODEL:
-            saveScore(test_scores.mean())
+            saveScore(test_scores)
             saver.save(SESSION, model_savefile)
             print("Saving the network weigths to:", model_savefile)
             if test_scores.mean() > max_avgR:

@@ -27,7 +27,7 @@ class mit:
         file_reader = open(self.file)
         lines = file_reader.readlines()
         # 读取数据
-        print('Reading file....')
+        #('Reading file....')
         for line in lines:
             line = line.strip()
             # Transition Probabilities
@@ -57,18 +57,18 @@ class mit:
                 r_state = float(items[1].strip())
                 self.reward[action][state] = r_state
 
-        print('Reading file done!')
+        #print('Reading file done!')
         self.reset()
     
     def reset(self):
-        print('Initailize start state...')
+        #print('Initailize start state...')
         self.cur_state = choices(self.state_list, self.p_state, k=1)[0]
         p_obs = self.O[randint(0,self.actions-1)][self.cur_state].flatten()
         self.cur_observation = choices(self.obs_list, p_obs, k=1)[0]
         self.total_reward = 0
         self.total_steps = 0
         self.is_terminated = False
-        print('Initailize done! Init_state:', self.cur_state, ' Init_obs:', self.cur_observation)
+        #print('Initailize done! Init_state:', self.cur_state, ' Init_obs:', self.cur_observation)
                 
     def make_action(self, action):
         self.total_steps += 1
@@ -102,10 +102,10 @@ class GameSimulator:
         
     def initialize(self):
         # 初始化游戏，返回游戏的动作数目
-        print("Initializing game...")
+        #print("Initializing game...")
         self.game = mit()
         self.game.init_game()
-        print("Game initialized.")
+        #print("Game initialized.")
         return self.game.actions
 
     def get_state(self):
