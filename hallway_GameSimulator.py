@@ -34,6 +34,8 @@ class hallway:
         O_last_state = 0
         for line in lines:
             line = line.strip()
+            if len(line)==0:
+                continue
             # Transition Probabilities
             if T_flag==1:
                 T_flag = 0
@@ -78,8 +80,9 @@ class hallway:
     
     def reset(self):
         #print('Initailize start state...')
+        #print('total steps:',self.total_steps)
         self.cur_state = choices(self.state_list, self.p_state, k=1)[0]
-        p_obs = self.O[:][self.cur_state].flatten()
+        p_obs = self.O[:,self.cur_state].flatten()
         self.cur_observation = choices(self.obs_list, p_obs, k=1)[0]
         self.total_reward = 0
         self.total_steps = 0
@@ -88,15 +91,16 @@ class hallway:
                 
     def make_action(self, action):
         self.total_steps += 1
-        if self.total_steps >= 2500:
+        if self.total_steps >= 250:
             self.is_terminated = True
             
         if action<0 or action>=self.actions:
             print('There is no this action:', action)
                 
-        p_trans = self.T[action][:][self.cur_state].flatten()
+        p_trans = self.T[action,self.cur_state,:].flatten()
         self.cur_state = choices(self.state_list, p_trans, k=1)[0]
-        p_obs = self.O[:][self.cur_state].flatten()
+        #print('after make action ',action,' ,arrive state ',self.cur_state)
+        p_obs = self.O[:,self.cur_state].flatten()
         self.cur_observation = choices(self.obs_list, p_obs, k=1)[0]
         cur_reward = self.reward[self.cur_state]
         self.total_reward += cur_reward
