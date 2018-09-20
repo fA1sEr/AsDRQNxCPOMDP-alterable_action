@@ -89,10 +89,11 @@ class hallway:
         self.is_terminated = False
         #print('Initailize done! Init_state:', self.cur_state, ' Init_obs:', self.cur_observation)
                 
-    def make_action(self, action):
+    def make_action(self, action, train):
         self.total_steps += 1
-        if self.total_steps >= 250:
-            self.is_terminated = True
+        if train==False:
+            if self.total_steps >= 250:
+                self.is_terminated = True
             
         if action<0 or action>=self.actions:
             print('There is no this action:', action)
@@ -149,9 +150,9 @@ class GameSimulator:
     def __get_button_size(self):
         return self.game.actions
     
-    def make_action(self, action):
+    def make_action(self, action, train=True):
         # 执行动作
-        _, reward, done = self.game.make_action(action)
+        _, reward, done = self.game.make_action(action, train)
         new_state = self.get_state()
         self.last_action = action
         return new_state, reward, done

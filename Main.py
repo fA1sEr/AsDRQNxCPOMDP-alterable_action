@@ -170,7 +170,7 @@ if not SKIP_LEARNING:
             while not game.is_terminared():
                 state = game.get_state()
                 action = agent.act(state, train=False)
-                game.make_action(action)
+                game.make_action(action, train=False)
             test_scores.append(game.get_total_reward())
 
         test_scores = np.array(test_scores)
