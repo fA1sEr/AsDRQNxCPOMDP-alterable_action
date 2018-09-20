@@ -8,7 +8,7 @@ import tensorflow as tf
 from tqdm import trange
 from vizdoom import *
 from Agent import Agent
-from mit_GameSimulator import GameSimulator
+from hallway_GameSimulator import GameSimulator
 
 # to choose gpu
 os.environ["CUDA_VISIBLE_DEVICES"] = "4"
@@ -17,8 +17,8 @@ FRAME_REPEAT = 1 # How many frames 1 action should be repeated
 UPDATE_FREQUENCY = 4 # How many actions should be taken between each network update
 COPY_FREQUENCY = 1000
 
-STATE_NUM = 28
-ACTION_LENGTH = 4 # change two place [1]
+STATE_NUM = 21
+ACTION_LENGTH = 5 # change two place [1]
 STATE_LENGTH = STATE_NUM + ACTION_LENGTH
 BATCH_SIZE = 32 # Batch size for experience replay
 LEARNING_RATE = 0.001 # Learning rate of model
