@@ -57,9 +57,9 @@ class hallway:
                     T_last_state = int(items[2].strip())
                 else:
                     action = int(items[1].strip())
-                    n_state = int(items[2].strip())
+                    state = int(items[2].strip())
                     items = items[3].strip().split()
-                    state = int(items[0].strip())
+                    n_state = int(items[0].strip())
                     p_state = float(items[1].strip())
                     self.T[action][state][n_state] = p_state
             # Observation Probabilities
@@ -80,7 +80,7 @@ class hallway:
     
     def reset(self):
         #print('Initailize start state...')
-        #print('total steps:',self.total_steps)
+        print('total steps:',self.total_steps)
         self.cur_state = choices(self.state_list, self.p_state, k=1)[0]
         p_obs = self.O[:,self.cur_state].flatten()
         self.cur_observation = choices(self.obs_list, p_obs, k=1)[0]
