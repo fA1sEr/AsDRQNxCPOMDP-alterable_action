@@ -114,7 +114,7 @@ if not SKIP_LEARNING:
         else:
             action = agent.act(state)
         img_state, reward, done = game.make_action(action)
-        if not done:
+        if done!=1:
             state_new = img_state
         else:
             state_new = None
@@ -122,7 +122,7 @@ if not SKIP_LEARNING:
         agent.add_transition(state, action, reward, state_new, done)
         state = state_new
 
-        if done:
+        if done!=0:
             game.reset()
             agent.reset_cell_state()
             state = game.get_state()
@@ -142,7 +142,7 @@ if not SKIP_LEARNING:
                 learning_step += 1
                 action = agent.act(state)
                 img_state, reward, done = game.make_action(action)
-                if not done:
+                if done!=1:
                     state_new = img_state
                 else:
                     state_new = None
@@ -154,12 +154,12 @@ if not SKIP_LEARNING:
                 if learning_step % COPY_FREQUENCY == 0:
                     updateTarget(targetOps, SESSION)
 
-                if done:
+                if done!=0:
                     print("Epoch %d Train Game %d get %.1f" % (epoch, games_cnt, game.get_total_reward()))
                     break
-            if SAVE_MODEL and games_cnt % 10 == 0:
+            if SAVE_MODEL and games_cnt % 50 == 0:
                 saver.save(SESSION, model_savefile)
-                print("Saving the network weigths to:", model_savefile)
+                #print("Saving the network weigths to:", model_savefile)
 
         print("\nTesting...")
 
@@ -167,7 +167,7 @@ if not SKIP_LEARNING:
         for test_step in range(EPISODES_TO_TEST):
             game.reset()
             agent.reset_cell_state()
-            while not game.is_terminared():
+            while game.is_terminated()==0:
                 state = game.get_state()
                 action = agent.act(state, train=False)
                 game.make_action(action, train=False)

@@ -136,7 +136,7 @@ class GameSimulator:
         self.last_action = action
         return new_state, reward, done
     
-    def is_terminared(self):
+    def is_terminated(self):
         # 判断游戏是否终止
         return self.game.is_terminated
     

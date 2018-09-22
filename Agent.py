@@ -50,7 +50,10 @@ class Agent:
             inputs = s1
 
             q = np.max(self.target_model.get_q(s2, state_in), axis=1)
-            targets = r + self.gamma * (1 - d) * q
+            if d==1:
+                targets = r
+            else:
+                targets = r + self.gamma * q
 
             self.model.learn(inputs, targets, state_in, a)
 

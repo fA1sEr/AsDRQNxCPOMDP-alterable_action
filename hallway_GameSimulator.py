@@ -20,7 +20,7 @@ class hallway:
         self.reward = np.zeros([self.states], dtype=np.float32)
         self.p_state = [0.017865, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.017857, 0.0, 0.0, 0.0, 0.0]
         self.total_steps = 0
-        self.is_terminated = False
+        self.is_terminated = 0
         self.total_reward = 0
         
     def init_game(self):
@@ -86,14 +86,17 @@ class hallway:
         self.cur_observation = choices(self.obs_list, p_obs, k=1)[0]
         self.total_reward = 0
         self.total_steps = 0
-        self.is_terminated = False
+        self.is_terminated = 0
         #print('Initailize done! Init_state:', self.cur_state, ' Init_obs:', self.cur_observation)
                 
     def make_action(self, action, train):
         self.total_steps += 1
         if train==False:
             if self.total_steps >= 250:
-                self.is_terminated = True
+                self.is_terminated = 1
+        else:
+            if self.total_steps >= 2500:
+                self.is_terminated = -1
             
         if action<0 or action>=self.actions:
             print('There is no this action:', action)
@@ -107,7 +110,7 @@ class hallway:
         self.total_reward += cur_reward
         # 如果到达目标地点，奖励值为1，判为终止状态
         if cur_reward>0:
-            self.is_terminated = True
+            self.is_terminated = 1
             
         return self.cur_observation, cur_reward, self.is_terminated
     
@@ -157,7 +160,7 @@ class GameSimulator:
         self.last_action = action
         return new_state, reward, done
     
-    def is_terminared(self):
+    def is_terminated(self):
         # 判断游戏是否终止
         return self.game.is_terminated
     
