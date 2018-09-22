@@ -10,7 +10,7 @@ class ReplayMemory:
         self.s2 = np.zeros(state_shape, dtype=np.float32)
         self.a = np.zeros(memory_cap, dtype=np.int32)
         self.r = np.zeros(memory_cap, dtype=np.float32)
-        self.d = np.zeros(memory_cap, dtype=np.float32)
+        self.d = np.zeros(memory_cap, dtype=np.int32)
 
         self.memory_cap = memory_cap
         self.batch_size = batch_size
@@ -37,7 +37,7 @@ class ReplayMemory:
                 point = np.random.randint(0, self.size - self.trace_length)
                 accepted = True
                 for i in range(self.trace_length-1):
-                    if self.d[point+i] > 0:
+                    if self.d[point+i] != 0:
                         accepted = False
                         break
                 if accepted:
