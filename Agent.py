@@ -42,6 +42,12 @@ class Agent:
     def add_transition(self, s1, a, r, s2, d):
         self.memory.add_transition(s1, a, r, s2, d)
 
+    def __1to0(self, x):
+        for i in x:
+            if i==-1:
+                i=0
+        return x
+
     def learn_from_memory(self):
 
         if self.memory.size > self.min_buffer_size:
@@ -50,10 +56,7 @@ class Agent:
             inputs = s1
 
             q = np.max(self.target_model.get_q(s2, state_in), axis=1)
-            if int(d)==1:
-                targets = r
-            else:
-                targets = r + self.gamma * q
+            targets = r + self.gamma * (1 - __1to0(d)) * q
 
             self.model.learn(inputs, targets, state_in, a)
 
