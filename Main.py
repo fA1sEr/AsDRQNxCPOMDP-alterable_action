@@ -24,11 +24,11 @@ BATCH_SIZE = 32 # Batch size for experience replay
 LEARNING_RATE = 0.001 # Learning rate of model
 GAMMA = 0.99 # Discount factor
 
-MEMORY_CAP = 200000 # Amount of samples to store in memory
+MEMORY_CAP = 50000 # Amount of samples to store in memory
 
 EPSILON_MAX = 1 # Max exploration rate
-EPSILON_MIN = 0.05 # Min exploration rate
-EPSILON_DECAY_STEPS = 2e5 # How many steps to decay from max exploration to min exploration
+EPSILON_MIN = 0.1 # Min exploration rate
+EPSILON_DECAY_STEPS = 3e5 # How many steps to decay from max exploration to min exploration
 
 RANDOM_WANDER_STEPS = 200000 # How many steps to be sampled randomly before training starts
 
@@ -38,6 +38,7 @@ HIDDEN_SIZE = 768 # Size of the third convolutional layer when flattened
 EPOCHS = 200 # Epochs for training (1 epoch = 200 training Games and 10 test episodes)
 GAMES_PER_EPOCH = 200 # How actions to be taken per epoch
 EPISODES_TO_TEST = 10 # How many test episodes to be run per epoch for logging performance
+FINAL_TO_TEST = 100
 EPISODE_TO_WATCH = 10 # How many episodes to watch after training is complete
 
 TAU = 0.99 # How much the target network should be updated towards the online network at each update
@@ -164,7 +165,11 @@ if not SKIP_LEARNING:
         print("\nTesting...")
 
         test_scores = []
-        for test_step in range(EPISODES_TO_TEST):
+        if epoch==EPOCHS-1:
+            test_game_num = FINAL_TO_TEST
+        else:
+            test_game_num = EPISODES_TO_TEST
+        for test_step in range(test_game_num):
             game.reset()
             agent.reset_cell_state()
             while game.is_terminated()==0:
