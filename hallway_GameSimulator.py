@@ -107,7 +107,7 @@ class hallway:
         p_obs = self.O[:,self.cur_state].flatten()
         self.cur_observation = choices(self.obs_list, p_obs, k=1)[0]
         #reward has been changed
-        cur_reward = self.reward[self.cur_state] * 100
+        cur_reward = self.reward[self.cur_state] * 10
         self.total_reward += cur_reward
         # 如果到达目标地点，奖励值为1，判为终止状态
         if cur_reward>0:
