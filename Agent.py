@@ -39,8 +39,8 @@ class Agent:
 
         self.state_in = (np.zeros([1, self.hidden_size]), np.zeros([1, self.hidden_size]))
 
-    def add_transition(self, s1, a, r, s2, d):
-        self.memory.add_transition(s1, a, r, s2, d)
+    def add_transition(self, s1, a, r, s2, d, is_init=False):
+        self.memory.add_transition(s1, a, r, s2, d, is_init)
 
     def __1to0(self, x):
         for i in x:
