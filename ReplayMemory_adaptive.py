@@ -49,7 +49,7 @@ class ReplayMemory:
             if self.t == self.k:
                 self.t = 0
                 if self.check():
-                    self.begin += self.k
+                    self.begin += self.k * 2
                     self.delta = self.calculate()
                 else:
                     self.delta = self.delta_
