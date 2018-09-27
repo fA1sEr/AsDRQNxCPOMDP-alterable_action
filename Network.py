@@ -49,6 +49,10 @@ class Network:
         return self.session.run(self.q, feed_dict={self.state: state, self.train_length: self.trace_length_size,
                                                    self.batch_size: self.train_batch_size, self.state_in: state_in})
 
+    def get_1q(self, state, state_in):
+        return self.session.run(self.q, feed_dict={self.state: state, self.train_length: 1,
+                                                   self.batch_size: 1, self.state_in: state_in})
+
     def get_best_action(self, state, state_in):
         return self.session.run([self.best_a, self.rnn_state], feed_dict={self.state: [state], self.train_length: 1,
                                                                           self.batch_size: 1, self.state_in: state_in})
