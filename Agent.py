@@ -50,7 +50,7 @@ class Agent:
 
     def learn_from_memory(self):
 
-        if self.memory.size > self.min_buffer_size:
+        if self.memory.end - self.memory.begin > self.min_buffer_size:
             state_in = (np.zeros([self.batch_size, self.hidden_size]), np.zeros([self.batch_size, self.hidden_size]))
             s1, a, r, s2, d = self.memory.get_transition()
             inputs = s1
