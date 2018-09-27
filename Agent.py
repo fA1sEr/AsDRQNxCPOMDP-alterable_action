@@ -17,7 +17,7 @@ class Agent:
                                     trace_length=trace_length, hidden_size=hidden_size, scope='target')
 
         self.memory = ReplayMemory(memory_cap=memory_cap, batch_size=batch_size,
-                                   state_length=state_length, trace_length=trace_length, network=model, gamma=gamma)
+                                   state_length=state_length, trace_length=trace_length, network=self.model, gamma=gamma)
 
         self.batch_size = batch_size
 
