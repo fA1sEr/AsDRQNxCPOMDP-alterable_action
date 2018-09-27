@@ -37,7 +37,7 @@ HIDDEN_SIZE = 768 # Size of the third convolutional layer when flattened
 
 EPOCHS = 400 # Epochs for training (1 epoch = 200 training Games and 10 test episodes)
 GAMES_PER_EPOCH = 200 # How actions to be taken per epoch
-EPISODES_TO_TEST = 10 # How many test episodes to be run per epoch for logging performance
+EPISODES_TO_TEST = 100 # How many test episodes to be run per epoch for logging performance
 FINAL_TO_TEST = 100
 EPISODE_TO_WATCH = 10 # How many episodes to watch after training is complete
 
@@ -135,6 +135,7 @@ if not SKIP_LEARNING:
         print("Training...")
 
         learning_step = 0
+        success_num = 0
         for games_cnt in range(GAMES_PER_EPOCH):
             game.reset()
             agent.reset_cell_state()
@@ -157,13 +158,17 @@ if not SKIP_LEARNING:
 
                 if done!=0:
                     print("Epoch %d Train Game %d get %.1f" % (epoch, games_cnt, game.get_total_reward()))
+                    if game.get_total_reward()>0:
+                        success_num += 1
                     break
             if SAVE_MODEL and games_cnt % 50 == 0:
                 saver.save(SESSION, model_savefile)
                 #print("Saving the network weigths to:", model_savefile)
 
-        print("\nTesting...")
+        print('train success rate:',success_num/GAMES_PER_EPOCH)
+        print('\nTesting...')
 
+        success_num = 0
         test_scores = []
         if epoch==EPOCHS-1:
             test_game_num = FINAL_TO_TEST
@@ -177,8 +182,11 @@ if not SKIP_LEARNING:
                 action = agent.act(state, train=False)
                 game.make_action(action, train=False)
             test_scores.append(game.get_total_reward())
+            if game.get_total_reward()>0:
+                success_num += 1
 
         test_scores = np.array(test_scores)
+        print('test success rate:',success_num/test_game_num)
         print("Results: mean: %.1f±%.1f," % (test_scores.mean(), test_scores.std()),
               "min: %.1f" % test_scores.min(), "max: %.1f" % test_scores.max())
 
