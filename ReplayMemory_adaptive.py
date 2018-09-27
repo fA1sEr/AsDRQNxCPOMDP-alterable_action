@@ -84,7 +84,7 @@ class ReplayMemory:
         ans = 0.0
         state_in = (np.zeros([1, self.network.hidden_size]), np.zeros([1, self.network.hidden_size]))
         for i in range(self.n_old):
-            q1 = np.max(self.network.get_q(s2[self.begin+i], state_in), axis=1)
-            q2 = self.network.get_q(s1[self.begin+i], state_in)[self.a[self.begin+i]]
+            q1 = np.max(self.network.get_q(self.s2[self.begin+i], state_in), axis=1)
+            q2 = self.network.get_q(self.s1[self.begin+i], state_in)[self.a[self.begin+i]]
             ans += abs(self.r[self.begin+i] + self.gamma*q1 - q2)
         return ans
