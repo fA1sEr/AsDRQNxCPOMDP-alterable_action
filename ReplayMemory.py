@@ -3,7 +3,7 @@ import numpy as np
 
 
 class ReplayMemory:
-    def __init__(self, memory_cap, batch_size, state_length, trace_length):
+    def __init__(self, memory_cap, batch_size, state_length, trace_length, network, gamma):
 
         state_shape = (memory_cap, state_length)
         self.s1 = np.zeros(state_shape, dtype=np.float32)

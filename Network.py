@@ -8,6 +8,7 @@ class Network:
         self.train_batch_size = batch_size
         self.state_length = state_length
         self.trace_length_size = trace_length
+        self.hidden_size = hidden_size
 
         self.state = tf.placeholder(tf.float32, shape=[None, self.state_length])
         self.train_length = tf.placeholder(dtype=tf.int32)
