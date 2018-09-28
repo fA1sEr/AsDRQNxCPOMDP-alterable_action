@@ -21,8 +21,8 @@ STATE_NUM = 21
 ACTION_LENGTH = 5 # change two place [1]
 STATE_LENGTH = STATE_NUM + ACTION_LENGTH
 BATCH_SIZE = 32 # Batch size for experience replay
-LEARNING_RATE = 0.001 # Learning rate of model
-GAMMA = 0.99 # Discount factor
+LEARNING_RATE = 0.0001 # Learning rate of model
+GAMMA = 0.95 # Discount factor
 
 MEMORY_CAP = 10000000 # Amount of samples to store in memory
 

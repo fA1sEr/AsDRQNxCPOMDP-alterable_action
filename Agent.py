@@ -56,8 +56,9 @@ class Agent:
             inputs = s1
 
             q = np.max(self.target_model.get_q(s2, state_in), axis=1)
+            print('q:',q)
             targets = r + self.gamma * (1 - self.__1to0(d)) * q
-
+            print('target_q:',targets)
             self.model.learn(inputs, targets, state_in, a)
 
     def act(self, state, train=True):
@@ -68,9 +69,11 @@ class Agent:
             else:
                 a, self.state_in = self.model.get_best_action(state, self.state_in)
                 a = a[0]
+            #    print('a:',a)
         else:
             a, self.state_in = self.model.get_best_action(state, self.state_in)
             a = a[0]
+            #print('a:',a)
         return a
 
     def explore(self, epsilon):
