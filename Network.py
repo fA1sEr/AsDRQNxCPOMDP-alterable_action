@@ -16,7 +16,7 @@ class Network:
         self.train_length = tf.placeholder(dtype=tf.int32)
         self.batch_size = tf.placeholder(dtype=tf.int32, shape=[])
 
-        self.flat = slim.fully_connected(self.state, hidden_size, activation_fn=None)
+        self.flat = tf.contrib.layers.fully_connected(self.state, hidden_size, activation_fn=tf.nn.tanh)
         #self.flat = tf.Print(self.flat, [self.flat], message='flat:', summarize=100)
 
         self.cell = tf.contrib.rnn.BasicLSTMCell(num_units=hidden_size, state_is_tuple=True)
@@ -32,7 +32,7 @@ class Network:
         self.rnn = tf.reshape(self.rnn, shape=[-1, hidden_size])
         #self.rnn = tf.Print(self.rnn, [self.rnn], message='rnn:', summarize=100)
 
-        self.q = slim.fully_connected(self.rnn, action_count, activation_fn=None)
+        self.q = tf.contrib.layers.fully_connected(self.rnn, action_count, activation_fn=tf.nn.tanh)
         #self.q = tf.Print(self.q, [self.q], message='q:', summarize=100)
 
         self.best_a = tf.argmax(self.q, 1)
