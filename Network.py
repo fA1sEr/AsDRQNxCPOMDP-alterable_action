@@ -11,18 +11,18 @@ class Network:
         self.hidden_size = hidden_size
 
         self.state = tf.placeholder(tf.float32, shape=[None, self.state_length])
-        self.state = tf.Print(self.state, [self.state], message='state:', summarize=100)
+        #self.state = tf.Print(self.state, [self.state], message='state:', summarize=100)
 
         self.train_length = tf.placeholder(dtype=tf.int32)
         self.batch_size = tf.placeholder(dtype=tf.int32, shape=[])
 
-        self.flat = tf.contrib.layers.legacy_fully_connected(x=self.state, num_output_units=hidden_size)
-        self.flat = tf.Print(self.flat, [self.flat], message='flat:', summarize=100)
+        self.flat = slim.fully_connected(self.state, hidden_size, activation_fn=None)
+        #self.flat = tf.Print(self.flat, [self.flat], message='flat:', summarize=100)
 
         self.cell = tf.contrib.rnn.BasicLSTMCell(num_units=hidden_size, state_is_tuple=True)
 
         self.fc_reshape = tf.reshape(self.flat, [self.batch_size, self.train_length, hidden_size])
-        self.fc_reshape = tf.Print(self.fc_reshape, [self.fc_reshape], message='fc_reshape:', summarize=100)
+        #self.fc_reshape = tf.Print(self.fc_reshape, [self.fc_reshape], message='fc_reshape:', summarize=100)
 
 
         self.state_in = self.cell.zero_state(self.batch_size, tf.float32)
@@ -30,10 +30,10 @@ class Network:
                                                      initial_state=self.state_in, scope=scope+'_rnn')
 
         self.rnn = tf.reshape(self.rnn, shape=[-1, hidden_size])
-        self.rnn = tf.Print(self.rnn, [self.rnn], message='rnn:', summarize=100)
+        #self.rnn = tf.Print(self.rnn, [self.rnn], message='rnn:', summarize=100)
 
         self.q = slim.fully_connected(self.rnn, action_count, activation_fn=None)
-        self.q = tf.Print(self.q, [self.q], message='q:', summarize=100)
+        #self.q = tf.Print(self.q, [self.q], message='q:', summarize=100)
 
         self.best_a = tf.argmax(self.q, 1)
 
@@ -59,6 +59,7 @@ class Network:
                                                    self.batch_size: self.train_batch_size, self.state_in: state_in})
 
     def get_1q(self, state, state_in):
+        #print('state:',state)
         res = self.session.run(self.q, feed_dict={self.state: state, self.train_length: 1,
                                                    self.batch_size: 1, self.state_in: state_in})
         return res
