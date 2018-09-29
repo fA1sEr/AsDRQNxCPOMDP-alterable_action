@@ -86,7 +86,7 @@ class ReplayMemory:
         for i in range(self.n_old):
             q1 = np.max(self.network.get_1q(self.s2[self.begin+i].reshape(1,26), state_in), axis=1)[0]
             q2 = self.network.get_1q(self.s1[self.begin+i].reshape(1,26), state_in)[0][self.a[self.begin+i]]
-            print('q1:',q1,'q2:',q2)
+            #print('q1:',q1,'q2:',q2)
             ans += abs(self.r[self.begin+i] + self.gamma*q1 - q2)
         print('ans:',ans)
         return ans

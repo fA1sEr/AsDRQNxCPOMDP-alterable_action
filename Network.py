@@ -52,11 +52,11 @@ class Network:
     def get_1q(self, state, state_in):
         res = self.session.run(self.q, feed_dict={self.state: state, self.train_length: 1,
                                                    self.batch_size: 1, self.state_in: state_in})
-        self.session.run(tf.Print(input_=self.state, data=[self.state], message='state:', summarize=10000))
-        self.session.run(tf.Print(input_=self.flat, data=[self.flat], message='flat:', summarize=10000))
-        self.session.run(tf.Print(input_=self.fc_reshape, data=[self.fc_reshape], message='fc_reshape:', summarize=10000))
-        self.session.run(tf.Print(input_=self.rnn, data=[self.rnn], message='rnn:', summarize=10000))
-        self.session.run(tf.Print(input_=self.q, data=[self.q], message='q:', summarize=10000))
+        self.session.run(tf.Print(self.state, [self.state], message='state:', summarize=100))
+        self.session.run(tf.Print(self.flat, [self.flat], message='flat:', summarize=100))
+        self.session.run(tf.Print(self.fc_reshape, [self.fc_reshape], message='fc_reshape:', summarize=100))
+        self.session.run(tf.Print(self.rnn, [self.rnn], message='rnn:', summarize=100))
+        self.session.run(tf.Print(self.q, [self.q], message='q:', summarize=100))
         return res
 
     def get_best_action(self, state, state_in):
