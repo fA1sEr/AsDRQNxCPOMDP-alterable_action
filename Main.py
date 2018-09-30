@@ -28,7 +28,7 @@ MEMORY_CAP = 10000000 # Amount of samples to store in memory
 
 EPSILON_MAX = 1 # Max exploration rate
 EPSILON_MIN = 0.1 # Min exploration rate
-EPSILON_DECAY_STEPS = 1e5 # How many steps to decay from max exploration to min exploration
+EPSILON_DECAY_STEPS = 3e5 # How many steps to decay from max exploration to min exploration
 
 RANDOM_WANDER_STEPS = 10000 # How many steps to be sampled randomly before training starts
 
