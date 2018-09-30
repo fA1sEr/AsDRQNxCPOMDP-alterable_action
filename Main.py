@@ -30,7 +30,7 @@ EPSILON_MAX = 1 # Max exploration rate
 EPSILON_MIN = 0.1 # Min exploration rate
 EPSILON_DECAY_STEPS = 3e5 # How many steps to decay from max exploration to min exploration
 
-RANDOM_WANDER_STEPS = 10000 # How many steps to be sampled randomly before training starts
+RANDOM_WANDER_STEPS = 50000 # How many steps to be sampled randomly before training starts
 
 TRACE_LENGTH = 8 # How many traces are used for network updates
 HIDDEN_SIZE = 768 # Size of the third convolutional layer when flattened
