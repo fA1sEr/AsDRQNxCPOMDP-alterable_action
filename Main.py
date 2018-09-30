@@ -14,7 +14,7 @@ from hallway_GameSimulator import GameSimulator
 os.environ["CUDA_VISIBLE_DEVICES"] = "4"
 
 FRAME_REPEAT = 1 # How many frames 1 action should be repeated
-UPDATE_FREQUENCY = 1 # How many actions should be taken between each network update
+UPDATE_FREQUENCY = 4
 COPY_FREQUENCY = 1000
 
 STATE_NUM = 21
@@ -38,7 +38,7 @@ HIDDEN_SIZE = 768 # Size of the third convolutional layer when flattened
 EPOCHS = 100 # Epochs for training (1 epoch = 200 training Games and 10 test episodes)
 GAMES_PER_EPOCH = 100 # How actions to be taken per epoch
 EPISODES_TO_TEST = 100 # How many test episodes to be run per epoch for logging performance
-FINAL_TO_TEST = 100
+FINAL_TO_TEST = 1000
 EPISODE_TO_WATCH = 10 # How many episodes to watch after training is complete
 
 TAU = 0.99 # How much the target network should be updated towards the online network at each update
