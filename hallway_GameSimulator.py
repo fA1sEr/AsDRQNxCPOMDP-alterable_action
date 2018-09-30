@@ -94,7 +94,7 @@ class hallway:
             if self.total_steps >= 250:
                 self.is_terminated = 1
         else:
-            if self.total_steps >= 1000:
+            if self.total_steps >= 250:
                 self.is_terminated = -1
             
         if action<0 or action>=self.actions:

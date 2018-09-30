@@ -28,15 +28,15 @@ MEMORY_CAP = 10000000 # Amount of samples to store in memory
 
 EPSILON_MAX = 1 # Max exploration rate
 EPSILON_MIN = 0.1 # Min exploration rate
-EPSILON_DECAY_STEPS = 3e5 # How many steps to decay from max exploration to min exploration
+EPSILON_DECAY_STEPS = 1e5 # How many steps to decay from max exploration to min exploration
 
-RANDOM_WANDER_STEPS = 50000 # How many steps to be sampled randomly before training starts
+RANDOM_WANDER_STEPS = 10000 # How many steps to be sampled randomly before training starts
 
 TRACE_LENGTH = 8 # How many traces are used for network updates
 HIDDEN_SIZE = 768 # Size of the third convolutional layer when flattened
 
-EPOCHS = 400 # Epochs for training (1 epoch = 200 training Games and 10 test episodes)
-GAMES_PER_EPOCH = 200 # How actions to be taken per epoch
+EPOCHS = 100 # Epochs for training (1 epoch = 200 training Games and 10 test episodes)
+GAMES_PER_EPOCH = 100 # How actions to be taken per epoch
 EPISODES_TO_TEST = 100 # How many test episodes to be run per epoch for logging performance
 FINAL_TO_TEST = 100
 EPISODE_TO_WATCH = 10 # How many episodes to watch after training is complete
@@ -64,9 +64,9 @@ def updateTarget(op_holder,sess):
     for op in op_holder:
         sess.run(op)
 
-def saveScore(score):
+def saveScore(score, suc_rate, avg_step):
     my_file = open(reward_savefile, 'a')  # Name and path of the reward text file
-    my_file.write("%s(%s)\n" % (score.mean(), score.std()))
+    my_file.write("avg reward:%s(%s) suc rate:%s avg step:%s\n" % (score.mean(), score.std(), suc_rate, avg_step))
     my_file.close()
 
 ###########################################
@@ -169,6 +169,7 @@ if not SKIP_LEARNING:
         print('\nTesting...')
 
         success_num = 0
+        success_total_step = 0
         test_scores = []
         if epoch==EPOCHS-1:
             test_game_num = FINAL_TO_TEST
@@ -177,13 +178,16 @@ if not SKIP_LEARNING:
         for test_step in range(test_game_num):
             game.reset()
             agent.reset_cell_state()
+            total_step = 0
             while game.is_terminated()==0:
                 state = game.get_state()
                 action = agent.act(state, train=False)
                 game.make_action(action, train=False)
+                total_step += 1
             test_scores.append(game.get_total_reward())
             if game.get_total_reward()>0:
                 success_num += 1
+                success_total_step += total_step
 
         test_scores = np.array(test_scores)
         print('test success rate:',success_num/test_game_num)
@@ -191,7 +195,7 @@ if not SKIP_LEARNING:
               "min: %.1f" % test_scores.min(), "max: %.1f" % test_scores.max())
 
         if SAVE_MODEL:
-            saveScore(test_scores)
+            saveScore(test_scores, success_num/test_game_num, success_total_step/success_num)
             saver.save(SESSION, model_savefile)
             print("Saving the network weigths to:", model_savefile)
             if test_scores.mean() > max_avgR:
