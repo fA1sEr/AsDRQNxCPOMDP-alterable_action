@@ -135,7 +135,7 @@ class GameSimulator:
     
     def make_action(self, action, train=True):
         # 执行动作
-        _, reward, done = self.game.make_action(action)
+        _, reward, done = self.game.make_action(action, train)
         new_state = self.get_state()
         self.last_action = action
         return new_state, reward, done
