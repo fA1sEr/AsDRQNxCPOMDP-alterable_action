@@ -86,7 +86,12 @@ class mit:
         self.cur_state = choices(self.state_list, p_trans, k=1)[0]
         p_obs = self.O[action][self.cur_state].flatten()
         self.cur_observation = choices(self.obs_list, p_obs, k=1)[0]
+        #reward has been changed
         cur_reward = self.reward[action][self.cur_state]
+        if cur_reward>0:
+            cur_reward *= 10
+        else:
+            cur_reward = 0.0
         self.total_reward += cur_reward
         # 如果到达目标地点，奖励值为1，判为终止状态
         if cur_reward>0:
