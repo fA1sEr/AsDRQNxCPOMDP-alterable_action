@@ -14,7 +14,7 @@ from hallway_GameSimulator import GameSimulator
 os.environ["CUDA_VISIBLE_DEVICES"] = "4"
 
 FRAME_REPEAT = 1 # How many frames 1 action should be repeated
-UPDATE_FREQUENCY = 4
+UPDATE_FREQUENCY = 1
 COPY_FREQUENCY = 1000
 
 STATE_NUM = 21
@@ -35,7 +35,7 @@ RANDOM_WANDER_STEPS = 50000 # How many steps to be sampled randomly before train
 TRACE_LENGTH = 8 # How many traces are used for network updates
 HIDDEN_SIZE = 768 # Size of the third convolutional layer when flattened
 
-EPOCHS = 100 # Epochs for training (1 epoch = 200 training Games and 10 test episodes)
+EPOCHS = 50 # Epochs for training (1 epoch = 200 training Games and 10 test episodes)
 GAMES_PER_EPOCH = 100 # How actions to be taken per epoch
 EPISODES_TO_TEST = 100 # How many test episodes to be run per epoch for logging performance
 FINAL_TO_TEST = 1000
@@ -195,7 +195,11 @@ if not SKIP_LEARNING:
               "min: %.1f" % test_scores.min(), "max: %.1f" % test_scores.max())
 
         if SAVE_MODEL:
-            saveScore(test_scores, success_num/test_game_num, success_total_step/success_num)
+            if success_num==0:
+                avg_step = 0
+            else:
+                avg_step = success_total_step/success_num
+            saveScore(test_scores, success_num/test_game_num, avg_step)
             saver.save(SESSION, model_savefile)
             print("Saving the network weigths to:", model_savefile)
             if test_scores.mean() > max_avgR:
