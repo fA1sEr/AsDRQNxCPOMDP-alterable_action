@@ -8,7 +8,7 @@ import tensorflow as tf
 from tqdm import trange
 from vizdoom import *
 from Agent import Agent
-from mit_GameSimulator import GameSimulator
+from GameSimulator/hallway2_GameSimulator import GameSimulator
 
 # to choose gpu
 os.environ["CUDA_VISIBLE_DEVICES"] = "4"
@@ -17,12 +17,12 @@ FRAME_REPEAT = 1 # How many frames 1 action should be repeated
 UPDATE_FREQUENCY = 1
 COPY_FREQUENCY = 1000
 
-STATE_NUM = 28
-ACTION_LENGTH = 4 # change two place [1]
+STATE_NUM = 17
+ACTION_LENGTH = 5 # change two place [1]
 STATE_LENGTH = STATE_NUM + ACTION_LENGTH
 BATCH_SIZE = 32 # Batch size for experience replay
 LEARNING_RATE = 0.0001 # Learning rate of model
-GAMMA = 0.99 # Discount factor
+GAMMA = 0.95 # Discount factor
 
 MEMORY_CAP = 10000000 # Amount of samples to store in memory
 
@@ -207,33 +207,3 @@ if not SKIP_LEARNING:
                 saver.save(SESSION, max_model_savefile)
 
         print("Total ellapsed time: %.2f minutes" % ((time() - time_start) / 60.0))
-'''
-print("TIME TO WATCH!!")
-# Reinitialize the game with window visible
-game.close()
-game.set_window_visible(True)
-game.set_mode(Mode.ASYNC_PLAYER)
-game.init()
-score = []
-for _ in trange(EPISODE_TO_WATCH, leave=False):
-    game.new_episode()
-    agent.reset_cell_state()
-    while not game.is_episode_finished():
-        state = preprocess(game.get_state().screen_buffer)
-        action = agent.act(state, train=False)
-        game.set_action(actions[action])
-        for i in range(FRAME_REPEAT):
-            game.advance_action()
-            done = game.is_episode_finished()
-            if done:
-                break
-
-    # Sleep between episodes
-    sleep(1.0)
-    score.append(game.get_total_reward())
-score = np.array(score)
-game.close()
-print("Results: mean: %.1f±%.1f," % (score.mean(), score.std()),
-          "min: %.1f" % score.min(), "max: %.1f" % score.max())
-'''
-#just test
