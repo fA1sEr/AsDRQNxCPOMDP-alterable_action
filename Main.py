@@ -8,7 +8,7 @@ import tensorflow as tf
 from tqdm import trange
 from vizdoom import *
 from Agent import Agent
-from hallway2_GameSimulator import GameSimulator
+from GameSimulator.hallway2_GameSimulator import GameSimulator
 
 # to choose gpu
 os.environ["CUDA_VISIBLE_DEVICES"] = "5"
