@@ -6,7 +6,7 @@ import numpy as np
 
 class hallway:
     def __init__(self):
-        self.file = 'hallway.POMDP'
+        self.file = 'GameSimulator/hallway.POMDP'
         self.states = 60
         self.actions = 5
         self.observations = 21
